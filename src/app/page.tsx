@@ -13,15 +13,15 @@ export default function Home() {
     >
       <div className="flex flex-col gap-6 items-center">
         <Typography className="max-w-2xl" variant="h1">
-          Information you need during on-call emergencies
+          Hello there 👨🏻
         </Typography>
         <Typography className="max-w-2xl" variant="h5">
-          Quickly link new on-call tickets to similar past
-          incidents and their solutions. All directly in
-          Slack the moment an incident happens.
+          Im Bill Gaize, Full Stack MERN Developer
+          experienced in API Integrations and with a weirdly
+          helupful background in Medical Lab Science.
         </Typography>
         <Link
-          href="https://map.sistilli.dev/public/coding/SaaS+Boilerplate"
+          href="https://www.linkedin.com/in/billgaize/"
           target="_blank"
         >
           <Button size="tiny" variant="ghost">
@@ -38,7 +38,8 @@ export default function Home() {
       <div className="flex flex-col md:pt-24 md:gap-36 gap-24 items-center">
         <div className="flex flex-col gap-12 items-center">
           <Typography className="max-w-2xl" variant="h1">
-            Quick solutions, less stress
+            Ready to help you in that app/website business
+            you have in mind
           </Typography>
           <div className="flex md:flex-row flex-col gap-12">
             <Feature
