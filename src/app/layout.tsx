@@ -9,8 +9,7 @@ import { Analytics } from '@vercel/analytics/react'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title:
-    'Bill Gaize Dev, Tech Solutions, and Consulting',
+  title: 'Bill Gaize Dev, Tech Solutions, and Consulting',
   description:
     'Quickly link new on-call tickets to similar past incidents and their solutions. All directly in Slack the moment an incident happens.',
   openGraph: {
@@ -18,8 +17,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title:
-      'Bill Gaize Dev, Tech Solutions, and Consulting',
+    title: 'Bill Gaize Dev, Tech Solutions, and Consulting',
     description:
       'Quickly link new on-call tickets to similar past incidents and their solutions. All directly in Slack the moment an incident happens.',
     images: ['https://i.imgur.com/MPMcyPP.png']

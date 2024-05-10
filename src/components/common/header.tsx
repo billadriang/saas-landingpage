@@ -45,12 +45,12 @@ export function Header({ className }: SidebarProps) {
       <Link
         href="mailto:me@billgaize.com"
         target="_blank"
-      //</div>>
-        //<Typography variant="p">Login</Typography>
-      //</Link>
-      //<Link
-        //href="https://map.sistilli.dev/public/coding/SaaS+Boilerplate"
-        //target="_blank"
+        // </div>>
+        // <Typography variant="p">Login</Typography>
+        // </Link>
+        // <Link
+        // href="https://map.sistilli.dev/public/coding/SaaS+Boilerplate"
+        // target="_blank"
       >
         <Button size="tiny" color="ghost">
           <Typography variant="p" className="text-black">

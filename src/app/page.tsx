@@ -38,8 +38,8 @@ export default function Home() {
       <div className="flex flex-col md:pt-24 md:gap-36 gap-24 items-center">
         <div className="flex flex-col gap-12 items-center">
           <Typography className="max-w-2xl" variant="h1">
-            Ready to help you in that app/website idea
-            you have in mind
+            Ready to help you in that app/website idea you
+            have in mind
           </Typography>
           <div className="flex md:flex-row flex-col gap-12">
             <Feature
@@ -64,8 +64,10 @@ export default function Home() {
             Fast and Professional Solutions
           </Typography>
           <Typography className="max-w-2xl" variant="p">
-          Got a vision for your online idea?
-          Let's bring it to life! Reach out now, and together we'll transform your idea into a thriving e-commerce success story. 💬
+            Got a vision for your online idea? Lets bring it
+            to life! Reach out now, and together we will
+            transform your idea into a thriving e-commerce
+            success story. 💬
           </Typography>
           <Image
             width={1024}
