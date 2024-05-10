@@ -25,7 +25,7 @@ export default function Home() {
           target="_blank"
         >
           <Button size="tiny" variant="ghost">
-            {`Get Started`}
+            {`Take a look`}
           </Button>
         </Link>
         <Image
@@ -38,35 +38,34 @@ export default function Home() {
       <div className="flex flex-col md:pt-24 md:gap-36 gap-24 items-center">
         <div className="flex flex-col gap-12 items-center">
           <Typography className="max-w-2xl" variant="h1">
-            Ready to help you in that app/website business
+            Ready to help you in that app/website idea
             you have in mind
           </Typography>
           <div className="flex md:flex-row flex-col gap-12">
             <Feature
               icon={<Timer size={24} />}
-              headline="Fix emergencies fast"
-              description="Save 20-30 minutes per on-call ticket - no more searching for relevant issues and runbooks"
+              headline="Quick Web Solutions"
+              description="Build your online presence in no time! With my extensive web development background, I craft high-quality sites and lightning-fast web solutions."
             />
             <Feature
               icon={<ArrowUpDown size={24} />}
-              headline="Universally compatible"
-              description="Works with PagerDuty, Jira, or custom Slack alerts—Pandem integrates with any system"
+              headline="Adaptable & Responsive"
+              description="Fully responsive designs that fit any tech platform! Specializing in e-commerce and Shopify, I'll get you selling online like a pro within hours."
             />
             <Feature
               icon={<Workflow size={24} />}
-              headline="Secure for your org"
-              description="We keep your data safe by taking top security measures."
+              headline="Seamless Integration"
+              description="Leverage my expertise in system and API integration to connect your tech stack effortlessly, delivering secure and efficient solutions for your organization."
             />
           </div>
         </div>
         <div className="flex flex-col gap-6 max-w-2xl items-center">
           <Typography className="max-w-2xl" variant="h1">
-            Instant setup, no custom code
+            Fast and Professional Solutions
           </Typography>
           <Typography className="max-w-2xl" variant="p">
-            Quickly link new on-call tickets to similar past
-            incidents and their solutions. All directly in
-            Slack the moment an incident happens.
+          Got a vision for your online idea?
+          Let's bring it to life! Reach out now, and together we'll transform your idea into a thriving e-commerce success story. 💬
           </Typography>
           <Image
             width={1024}
@@ -81,7 +80,7 @@ export default function Home() {
           </Typography>
           <div>Book a demo, or hop on a call</div>
           <Link
-            href="https://map.sistilli.dev/public/coding/SaaS+Boilerplate"
+            href="https://calendly.com/me--52uo/30min"
             target="_blank"
           >
             <Button size="tiny" variant="ghost">
