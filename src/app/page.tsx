@@ -1,11 +1,11 @@
 // app/page.tsx
 
-import { Button } from "@/components/ui/button";
-import Typography from "@/components/ui/typography";
-import Link from "next/link";
-import InteractiveCube from "@/components/ui/InteractiveCube"; // Importa el componente 3D
-import Feature from "./feature";
-import { ArrowUpDown, Timer, Workflow } from "lucide-react";
+import { Button } from '@/components/ui/button'
+import Typography from '@/components/ui/typography'
+import Link from 'next/link'
+import InteractiveCube from '@/components/ui/InteractiveCube' // Importa el componente 3D
+import Feature from './feature'
+import { ArrowUpDown, Timer, Workflow } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -18,11 +18,14 @@ export default function Home() {
           Hello there 👨🏻
         </Typography>
         <Typography className="max-w-2xl" variant="h5">
-          I'm Bill Gaize, Full Stack MERN Developer
-          experienced in API Integrations and with a weirdly
+          I am Bill Gaize, Full Stack MERN Developer
+          experienced in API Integrations with a weirdly
           helpful background in Medical Lab Science.
         </Typography>
-        <Link href="https://www.linkedin.com/in/billgaize/" target="_blank">
+        <Link
+          href="https://www.linkedin.com/in/billgaize/"
+          target="_blank"
+        >
           <Button size="tiny" variant="ghost">
             {`Take a look`}
           </Button>
@@ -33,7 +36,8 @@ export default function Home() {
       <div className="flex flex-col md:pt-24 md:gap-36 gap-24 items-center">
         <div className="flex flex-col gap-12 items-center">
           <Typography className="max-w-2xl" variant="h1">
-            Ready to help you in that app/website idea you have in mind
+            Ready to help you in that app/website idea you
+            have in mind
           </Typography>
           <div className="flex md:flex-row flex-col gap-12">
             <Feature
@@ -44,7 +48,7 @@ export default function Home() {
             <Feature
               icon={<ArrowUpDown size={24} />}
               headline="Adaptable & Responsive"
-              description="Fully responsive designs that fit any tech platform! Specializing in e-commerce and Shopify, I'll get you selling online like a pro within hours."
+              description="Fully responsive designs that fit any tech platform! Specializing in e-commerce and Shopify, I will get you selling online like a pro within hours."
             />
             <Feature
               icon={<Workflow size={24} />}
@@ -58,9 +62,10 @@ export default function Home() {
             Fast and Professional Solutions
           </Typography>
           <Typography className="max-w-2xl" variant="p">
-            Got a vision for your online idea? Let's bring it to life! Reach out
-            now, and together we'll transform your idea into a thriving
-            e-commerce success story. 💬
+            Got a vision for your online idea? Lets bring it
+            to life! Reach out now, and together we will
+            transform your idea into a thriving e-commerce
+            success story. 💬
           </Typography>
         </div>
         <div className="flex flex-col gap-6 items-center">
@@ -68,7 +73,10 @@ export default function Home() {
             Get in touch
           </Typography>
           <div>Book a slot, or email me</div>
-          <Link href="https://calendly.com/me--52uo/30min" target="_blank">
+          <Link
+            href="https://calendly.com/me--52uo/30min"
+            target="_blank"
+          >
             <Button size="tiny" variant="ghost">
               {`Book now`}
             </Button>
@@ -76,5 +84,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }

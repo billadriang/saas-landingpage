@@ -6,7 +6,9 @@ module.exports = {
   extends: [
     'standard-with-typescript',
     'plugin:react/recommended',
-    'prettier'
+    'prettier',
+    'next',
+    'next/core-web-vitals'
   ],
   overrides: [
     {
