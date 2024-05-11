@@ -4,14 +4,15 @@
 import React, { useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
+import type * as THREE from 'three' // Importando THREE para el uso de tipos
 
 const ModelComponent: React.FC = () => {
   const { scene } = useGLTF('/microscope.glb')
-  const ref = useRef<THREE.Object3D>()
+  const ref = useRef<THREE.Object3D>(null) // Agregando null como valor inicial
 
   useFrame(() => {
     if (ref.current) {
-      ref.current.rotation.y += 0.01
+      ref.current.rotation.y += 0.01 // Rotación constante en el eje y
     }
   })
 
