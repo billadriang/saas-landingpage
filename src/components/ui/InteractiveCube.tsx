@@ -21,7 +21,10 @@ const ModelComponent: React.FC = () => {
 
 const InteractiveModel: React.FC = () => {
   return (
-    <Canvas style={{ height: '600px', width: '100%' }}>
+    <Canvas
+      style={{ height: '600px', width: '100%' }}
+      camera={{ position: [5, 5, 5], fov: 50 }}
+    >
       <ambientLight intensity={1} />
       <pointLight position={[10, 10, 10]} intensity={2} />
       <spotLight
@@ -35,7 +38,10 @@ const InteractiveModel: React.FC = () => {
         intensity={0.5}
       />
       <ModelComponent />
-      <OrbitControls enableZoom={false} />
+      <OrbitControls
+        enableZoom={false}
+        maxPolarAngle={Math.PI / 2}
+      />
     </Canvas>
   )
 }
