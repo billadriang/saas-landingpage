@@ -19,8 +19,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Bill Gaize Dev, Tech Solutions, and Consulting',
     description:
-      'Quickly link new on-call tickets to similar past incidents and their solutions. All directly in Slack the moment an incident happens.',
-    images: ['https://i.imgur.com/MPMcyPP.png']
+      'Got a vision for your online idea? Lets bring it to life! Reach out now, and together we will transform your idea into a thriving e-commerce success story. 💬',
+    images: ['https://i.postimg.cc/T3v8TKB7/Capture.png']
   }
 }
 
