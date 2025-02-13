@@ -1,9 +1,8 @@
 // app/page.tsx
-
 import { Button } from '@/components/ui/button'
 import Typography from '@/components/ui/typography'
 import Link from 'next/link'
-import InteractiveCube from '@/components/ui/InteractiveCube' // Importa el componente 3D
+import InteractiveCube from '@/components/ui/InteractiveCube'
 import Feature from './feature'
 import { ArrowUpDown, Timer, Workflow } from 'lucide-react'
 
@@ -30,9 +29,16 @@ export default function Home() {
             {`Take a look`}
           </Button>
         </Link>
-        {/* Reemplaza el primer hero1.png con InteractiveCube */}
         <InteractiveCube />
+
+        {/* PDF Link Added Here */}
+        <div className="mt-12"> {/* Adjust margin-top as needed */}
+          <Link href="/properties_dayana.pdf" target="_blank" rel="noopener noreferrer">
+            <Button size="tiny" variant="ghost">View My Proposal (PDF)</Button>
+          </Link>
+        </div>
       </div>
+
       <div className="flex flex-col md:pt-24 md:gap-36 gap-24 items-center">
         <div className="flex flex-col gap-12 items-center">
           <Typography className="max-w-2xl" variant="h1">
@@ -84,5 +90,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  )
+  );
 }
