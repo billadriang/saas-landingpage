@@ -7,8 +7,8 @@
   <style>
     @font-face{
       font-family:'NightWindSent';
-      src: url('NightWindSentSample.ttf') format('truetype'),
-           url('NightWindSentSample.otf') format('opentype');
+      src: url('assets/NightWindSentSample.ttf') format('truetype'),
+           url('assets/NightWindSentSample.otf') format('opentype');
       font-weight:400; font-style:normal; font-display:swap;
     }
 
@@ -35,7 +35,7 @@
     .frame{
       width:min(92vw,var(--maxW));
       aspect-ratio:var(--ratio);
-      background:var(--bg) url('/assets/framev4.svg') no-repeat
+      background:var(--bg) url('assets/framev4.svg') no-repeat
                   calc(50% + var(--bgShiftX)) center/contain;
       position:relative;display:flex;align-items:center;justify-content:center;
     }
@@ -85,7 +85,7 @@
     <div class="content">
       <h1>Confirma asistencia</h1>
 
-      <form id="rsvp" action="https://script.google.com/macros/s/AKfycbzTE4WPKTexIvxcSF8w8E4sY2lJUXkajDCHQ2DvKYQVHlc7zanfsRIgm2DN5n7Le4Jm/exec" method="POST">
+      <form id="rsvp" action="https://script.google.com/macros/s/XXXXXXXXXXXX/exec" method="POST">
         <!-- Ajusta la URL del Google Apps Script aquí -->
         <input type="hidden" name="_subject" value="RSVP Boda – Nueva respuesta">
         <input type="hidden" name="_redirect" value="/gracias.html">
