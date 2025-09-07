@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>¡Gracias!</title>
+  <style>
+    @font-face{
+      font-family:'NightWindSent';
+      src: url('NightWindSentSample.ttf') format('truetype'),
+           url('NightWindSentSample.otf') format('opentype');
+      font-weight:400; font-style:normal; font-display:swap;
+    }
+    :root{
+      --bg:#a81b21;   /* rojo principal (antes: texto) */
+      --ink:#f3f2ee;  /* crema (antes: fondo) */
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      background:var(--bg);
+      color:var(--ink);
+      display:grid; place-items:center;
+      padding:24px;
+      font-family:'Playfair Display', serif;
+      text-align:center;
+    }
+    .card{
+      max-width:min(90vw,760px);
+      display:grid; gap:14px;
+    }
+    h1{
+      font-family:'NightWindSent', cursive;
+      font-size:clamp(30px,6vw,64px);
+      line-height:1.1;
+    }
+    p{font-size:clamp(16px,3.2vw,22px)}
+    .muted{opacity:.9}
+    a.btn{
+      display:inline-block; margin-top:10px;
+      padding:12px 18px; border-radius:999px;
+      border:1px solid currentColor; color:var(--ink);
+      text-decoration:none; font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <main class="card" aria-live="polite">
+    <h1>Gracias por responder</h1>
+    <p id="mensaje" class="muted">Procesando tu respuesta…</p>
+    <!-- Opcional: un botón para volver -->
+    <a class="btn" href="/">Volver</a>
+  </main>
+
+  <script>
+    // 1) Intentar leer de query (?a=Si / ?a=No / ?a=sí / etc.)
+    const params = new URLSearchParams(location.search);
+    let a = params.get('a');
+
+    // 2) Si no viene por URL, intentarlo desde sessionStorage (puesto en la página RSVP)
+    if(!a && sessionStorage.getItem('asistencia')){
+      a = sessionStorage.getItem('asistencia');
+    }
+
+    const msg = document.getElementById('mensaje');
+    const norm = (a||'').trim().toLowerCase();
+
+    if(norm.startsWith('s')){ // sí / si
+      msg.textContent = '¡Nos vemos el 6 de noviembre! 💍';
+    }else if(norm.startsWith('n')){ // no
+      msg.textContent = 'Esperamos vernos pronto de igual forma 🤍';
+    }else{
+      msg.textContent = 'Tu respuesta fue registrada. ¡Gracias!';
+    }
+  </script>
+</body>
+</html>
