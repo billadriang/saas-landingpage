@@ -7,13 +7,13 @@
   <style>
     @font-face{
       font-family:'NightWindSent';
-      src: url('NightWindSentSample.ttf') format('truetype'),
-           url('NightWindSentSample.otf') format('opentype');
+      src: url('assets/NightWindSentSample.ttf') format('truetype'),
+           url('assets/NightWindSentSample.otf') format('opentype');
       font-weight:400; font-style:normal; font-display:swap;
     }
     :root{
-      --bg:#a81b21;   /* rojo principal (antes: texto) */
-      --ink:#f3f2ee;  /* crema (antes: fondo) */
+      --bg:#a81b21;   /* rojo principal */
+      --ink:#f3f2ee;  /* crema */
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
@@ -48,16 +48,13 @@
   <main class="card" aria-live="polite">
     <h1>Gracias por responder</h1>
     <p id="mensaje" class="muted">Procesando tu respuesta…</p>
-    <!-- Opcional: un botón para volver -->
-    <a class="btn" href="/">Volver</a>
+    <a class="btn" href="/boda/">Volver</a>
   </main>
 
   <script>
-    // 1) Intentar leer de query (?a=Si / ?a=No / ?a=sí / etc.)
+    // Leer asistencia desde query (?a=Si/No) o desde sessionStorage
     const params = new URLSearchParams(location.search);
     let a = params.get('a');
-
-    // 2) Si no viene por URL, intentarlo desde sessionStorage (puesto en la página RSVP)
     if(!a && sessionStorage.getItem('asistencia')){
       a = sessionStorage.getItem('asistencia');
     }
