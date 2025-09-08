@@ -768,10 +768,15 @@ form.addEventListener('submit', (e) => {
   // Evita múltiples envíos
   if (form.dataset.submitting === '1') return
   form.dataset.submitting = '1'
-  // ~2.1s totales antes de enviar para permitir ver la animación
+  // Envía en background y navega a gracias.html con una pequeña espera para animación
+  try {
+    const fd = new FormData(form)
+    fetch(form.action, { method: 'POST', body: fd, mode: 'no-cors', keepalive: true }).catch(() => {})
+  } catch (_) {}
   setTimeout(() => {
-    form.submit()
-  }, 2100)
+    const nextUrl = '/boda/gracias.html?a=' + encodeURIComponent(hidden.value || '')
+    window.location.assign(nextUrl)
+  }, 4000)
 })
 
 // Prefill por URL (?name=...&assist=si/no)
