@@ -1,80 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>¡Gracias!</title>
-  <style>
-    @font-face{
-      font-family:'NightWindSent';
-      src: url('assets/NightWindSentSample.ttf') format('truetype'),
-           url('assets/NightWindSentSample.otf') format('opentype');
-      font-weight:400; font-style:normal; font-display:swap;
-    }
-    :root{
-      --bg:#a81b21;  /* rojo oscuro de fondo */
-      --ink:#ffffff; /* letras blancas */
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    body{
-      background:var(--bg);
-      color:var(--ink);
-      display:grid; place-items:center;
-      padding:24px;
-      font-family:'Lato', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      text-align:center;
-    }
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <title>¡Gracias!</title>
+    <style>
+      @font-face {
+        font-family: 'NightWindSent';
+        src:
+          url('assets/NightWindSentSample.ttf')
+            format('truetype'),
+          url('assets/NightWindSentSample.otf')
+            format('opentype');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      :root {
+        --bg: #a81b21; /* rojo oscuro de fondo */
+        --ink: #ffffff; /* letras blancas */
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        font-family:
+          'Lato',
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial,
+          sans-serif;
+        text-align: center;
+      }
 
-    .card{ max-width:min(92vw, 760px); display:grid; gap:14px }
-    h1{ font-family:'NightWindSent', cursive; font-size:clamp(30px,6vw,64px); line-height:1.1 }
-    p{ font-size:clamp(16px,3.2vw,22px) }
-    .muted{ opacity:.9 }
-    a.btn{ display:inline-block; margin-top:10px; padding:12px 18px; border-radius:999px; border:1px solid var(--ink); color:var(--ink); text-decoration:none; font-weight:700 }
-  </style>
-</head>
-<body>
-  <main class="card" aria-live="polite">
-    <h1>Gracias por responder</h1>
-    <p id="mensaje" class="muted">Procesando tu respuesta…</p>
-    <a class="btn" id="igBtn" href="https://www.instagram.com/alejosmedia/reel/DM23-NLM_K5/" target="_blank" rel="noopener">¿Quieres ver algo genial?</a>
-    <a class="btn" href="/boda/">Volver</a>
-  </main>
+      .card {
+        max-width: min(92vw, 760px);
+        display: grid;
+        gap: 14px;
+      }
+      h1 {
+        font-family: 'NightWindSent', cursive;
+        font-size: clamp(30px, 6vw, 64px);
+        line-height: 1.1;
+      }
+      p {
+        font-size: clamp(16px, 3.2vw, 22px);
+      }
+      .muted {
+        opacity: 0.9;
+      }
+      a.btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 12px 18px;
+        border-radius: 999px;
+        border: 1px solid var(--ink);
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card" aria-live="polite">
+      <h1>Gracias por responder</h1>
+      <p id="mensaje" class="muted">
+        Procesando tu respuesta…
+      </p>
+      <a
+        class="btn"
+        id="igBtn"
+        href="https://www.instagram.com/alejosmedia/reel/DM23-NLM_K5/"
+        target="_blank"
+        rel="noopener"
+        >¿Quieres ver algo genial?</a
+      >
+      <a class="btn" href="/boda/">Volver</a>
+    </main>
 
-  <script>
-    // Leer asistencia desde query (?a=Si/No) o desde sessionStorage
-    const params = new URLSearchParams(location.search);
-    let a = params.get('a');
-    if(!a && sessionStorage.getItem('asistencia')){
-      a = sessionStorage.getItem('asistencia');
+    <script>
+      // Leer asistencia desde query (?a=Si/No) o desde sessionStorage
+const params = new URLSearchParams(location.search)
+let a = params.get('a')
+if (!a && sessionStorage.getItem('asistencia')) {
+  a = sessionStorage.getItem('asistencia')
+}
+
+const msg = document.getElementById('mensaje')
+const norm = (a || '').trim().toLowerCase()
+
+if (norm.startsWith('s')) {
+  // sí / si
+  msg.textContent = '¡Nos vemos el 6 de noviembre! 💍'
+} else if (norm.startsWith('n')) {
+  // no
+  msg.textContent =
+    'Esperamos vernos pronto de igual forma 🤍'
+} else {
+  msg.textContent = 'Tu respuesta fue registrada. ¡Gracias!'
+}
+
+// Intento de abrir Instagram app; fallback al enlace web
+;(function () {
+  const btn = document.getElementById('igBtn')
+  if (!btn) return
+  const appUrl = 'instagram://media?id=DM23-NLM_K5'
+  const webUrl = btn.href
+  btn.addEventListener('click', function (e) {
+    e.preventDefault()
+    let fallback = setTimeout(() => {
+      window.location.href = webUrl
+    }, 800)
+    const onHide = () => {
+      clearTimeout(fallback)
+      document.removeEventListener(
+        'visibilitychange',
+        onHide
+      )
     }
-
-    const msg = document.getElementById('mensaje');
-    const norm = (a||'').trim().toLowerCase();
-
-    if(norm.startsWith('s')){ // sí / si
-      msg.textContent = '¡Nos vemos el 6 de noviembre! 💍';
-    }else if(norm.startsWith('n')){ // no
-      msg.textContent = 'Esperamos vernos pronto de igual forma 🤍';
-    }else{
-      msg.textContent = 'Tu respuesta fue registrada. ¡Gracias!';
+    document.addEventListener('visibilitychange', onHide)
+    // intenta abrir la app
+    try {
+      window.location.href = appUrl
+    } catch (_) {
+      /* ignore */
     }
-
-    // Intento de abrir Instagram app; fallback al enlace web
-    (function(){
-      const btn = document.getElementById('igBtn');
-      if(!btn) return;
-      const appUrl = 'instagram://media?id=DM23-NLM_K5';
-      const webUrl = btn.href;
-      btn.addEventListener('click', function(e){
-        e.preventDefault();
-        let fallback = setTimeout(()=>{ window.location.href = webUrl; }, 800);
-        const onHide = () => { clearTimeout(fallback); document.removeEventListener('visibilitychange', onHide); };
-        document.addEventListener('visibilitychange', onHide);
-        // intenta abrir la app
-        try { window.location.href = appUrl; } catch(_) { /* ignore */ }
-      });
-    })();
-  </script>
-</body>
+  })
+})()
+    </script>
+  </body>
 </html>

@@ -1,6 +1,12 @@
 {
   "rewrites": [
-    { "source": "/boda",  "destination": "/boda/index.html" },
-    { "source": "/boda/", "destination": "/boda/index.html" }
+    {
+      "source": "/boda",
+      "destination": "/boda/index.html"
+    },
+    {
+      "source": "/boda/",
+      "destination": "/boda/index.html"
+    }
   ]
 }

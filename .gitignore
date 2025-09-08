@@ -37,3 +37,4 @@ next-env.d.ts
 
 # local clones (not part of this repo)
 rosy-day/
+public/rosy/
