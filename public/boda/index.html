@@ -4,76 +4,248 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RSVP – Boda</title>
-  <style>
-    @font-face{
-  font-family:'NightWindSent';
-  src: url('/boda/assets/NightWindSentSample.ttf') format('truetype'),
-       url('/boda/assets/NightWindSentSample.otf') format('opentype');
-  font-weight:400; font-style:normal; font-display:swap;
-}
 
+  <!-- Lato para texto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Fuente caligráfica de la invitación */
+    @font-face{
+      font-family:'NightWindSent';
+      src: url('/boda/assets/NightWindSentSample.ttf') format('truetype'),
+           url('/boda/assets/NightWindSentSample.otf') format('opentype');
+      font-weight:400; font-style:normal; font-display:swap;
+    }
 
     :root{
-      --bg:#f3f2ee;           /* fondo crema */
-      --ink:#a81b21;          /* rojo principal */
-      --padX:9%;              /* padding lateral dentro del marco */
-      --padY:13%;             /* padding sup/inf dentro del marco */
-      --bgShiftX:0px;         /* afina centrado del SVG (+/- px) */
-      --maxW:760px;           /* ancho máximo del marco */
-      --ratio:768/1075;       /* AJUSTA al viewBox real del SVG */
+      --bg:#f3f2ee;   /* fondo crema */
+      --ink:#a81b21;  /* rojo principal */
+      --padX:12.5%;   /* padding lateral dentro del marco (ajustado) */
+      --padY:14.5%;   /* padding sup/inf dentro del marco (ajustado) */
+      --safe:1.75%;   /* margen de seguridad adicional respecto al borde */
+      --viewportGap: 1cm; /* margen entre frame y ventana (cada lado) */
+      --circle: 68px; /* diámetro de los botones circulares */
+      --gapForm: 14px;   /* separación vertical entre bloques del formulario */
+      --gapChoices: 16px;/* separación entre botones circulares */
+      --bgShiftX:0px; /* afina centrado del SVG (+/- px) */
+      --maxW:760px;
+      /* Relación exacta del SVG (viewBox 22410x31380) */
+      --ratio: calc(22410/31380);
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%;overflow-x:hidden}
+    html,body{
+      height:100dvh; width:100vw;
+      overflow:hidden; overscroll-behavior:none;
+      position:fixed; inset:0; touch-action:none; -webkit-overflow-scrolling:auto;
+    }
     body{
       background:var(--bg);
-      font-family:'Playfair Display',serif;
+      font-family:'Lato', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--ink);
       display:grid;place-items:center;
       padding:16px;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
+
+    /* Cake decoration outside the frame */
+    .cake-deco{
+      position:fixed; left:50%; bottom:8px; transform: translate(-50%, 0);
+      height:84px; width:auto; pointer-events:none; user-select:none;
+      z-index:10; /* sobre el frame */
+      will-change: transform;
+    }
+    @media (max-width:520px){ .cake-deco{ height:116px; bottom:6px } }
+
+    /* Overlay tipo cortina durante animación de la torta */
+    .loading-overlay{
+      position:fixed; inset:0; background:var(--ink); opacity:0; pointer-events:none;
+      transition: opacity .25s ease; z-index:6; /* sobre el frame, bajo la torta */
+    }
+    .loading-overlay.show{ opacity:.20 }
+
+    /* Move to center then wobble + slow scale (2s) */
+    @keyframes cakeDance {
+      0%   { transform: translate(-50%, -50%) scale(1.00) rotate(0deg); }
+      25%  { transform: translate(-50%, -50%) scale(1.06) rotate(3deg); }
+      50%  { transform: translate(-50%, -50%) scale(1.12) rotate(-3deg); }
+      75%  { transform: translate(-50%, -50%) scale(1.16) rotate(2deg); }
+      100% { transform: translate(-50%, -50%) scale(1.20) rotate(0deg); }
+    }
+    .cake-deco.loading{
+      top: 50%; bottom:auto; transform: translate(-50%, -50%);
+      animation: cakeDance 2s ease-in-out forwards;
+      transform-origin:50% 50%;
+    }
+    /* .cake-deco.dance no longer used */
 
     .frame{
-      width:min(92vw,var(--maxW));
-      aspect-ratio:var(--ratio);
-       background: var(--bg) url('/boda/assets/framev4.svg') no-repeat
-              calc(50% + var(--bgShiftX)) center/contain;
-      position:relative;display:flex;align-items:center;justify-content:center;
+      /* Frame fijo a 1cm del borde de la ventana, en todos los lados */
+      position:fixed;
+      top: calc(var(--viewportGap) + env(safe-area-inset-top));
+      bottom: calc(var(--viewportGap) + env(safe-area-inset-bottom));
+      left: calc(var(--viewportGap) + env(safe-area-inset-left));
+      right: calc(var(--viewportGap) + env(safe-area-inset-right));
+      background:var(--bg) url('/boda/assets/framev4.svg') no-repeat center/100% 100%;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+      z-index:0;
+      /* Zoom control via double tap/click */
+      transform-origin: var(--zx, 50%) var(--zy, 50%);
+      transition: transform .24s ease;
     }
 
-    .content{position:absolute;inset:var(--padY) var(--padX);
-      display:grid;gap:14px;place-items:center;text-align:center}
+    .frame.zoomed{ transform: scale(var(--zoomScale, 1.18)); cursor: zoom-out }
 
-    h1{
-      font-family:'NightWindSent',cursive;
-      font-size:clamp(28px,5.8vw,56px);
-      letter-spacing:.3px
+    /* Alternativa (opcional): preservar proporción del SVG sin deformar
+       .frame.preserve-ratio{ background-size:contain; background-position:center }
+    */
+
+    .content{
+      position:absolute; inset:0;           /* ocupa todo el frame */
+      padding:1cm;                          /* margen interno fijo (1cm) */
+      display:grid; gap:18px; place-items:center; text-align:center;
+      width:100%;
+      overflow:hidden;                      /* sin scroll interno */
+      overscroll-behavior:none;
     }
 
-    form{display:grid;gap:12px;width:min(520px,100%)}
-    label{font-weight:600}
-    select{
-      width:100%;font:inherit;padding:10px 12px;border:1px solid #a81b2133;
-      border-radius:10px;background:#fff
+    /* Asegura que los hijos no peguen contra el borde interno */
+    .content > *{ width:min(560px, 100%); margin-inline:auto }
+
+    /* Título en 3 líneas, simétrico y “apuntando hacia arriba” */
+    .title{
+      display:grid;
+      gap:0;                /* gap no negativo */
+      transform:rotate(-12deg);
+      transform-origin:50% 100%;
+      /* separa el título del formulario: 2x el gap del form */
+      margin-bottom: calc(var(--gapForm) * 2);
+      max-width:min(520px, 88%);
+      margin-inline:auto;
+    }
+    /* Animación de entrada (rebote suave, 2 veces) */
+    @keyframes bounceTitle {
+      0%   { transform: rotate(-12deg) translateY(0)    scale(1); }
+      30%  { transform: rotate(-12deg) translateY(-10px) scale(1.04); }
+      55%  { transform: rotate(-12deg) translateY(0)    scale(1); }
+      75%  { transform: rotate(-12deg) translateY(-6px)  scale(1.02); }
+      100% { transform: rotate(-12deg) translateY(0)    scale(1); }
+    }
+    .title.a-bounce{ animation: bounceTitle .7s ease-out 2 both }
+    .title span{
+      font-family:'NightWindSent', cursive;
+      line-height:1;
+      display:block;
+      letter-spacing:.2px;
+    }
+    .title .line1{
+      font-size:clamp(45px, calc(6.8vw + 3px), 71px);
+      transform:translateX(-18px);
+      margin-bottom:-8px;  /* solapa sutil */
+    }
+    .title .line2{
+      font-size:clamp(31px, calc(4.6vw + 3px), 51px);
+      transform:translateX(2px);
+      margin-bottom:-6px;
+    }
+    .title .line3{
+      font-size:clamp(45px, calc(6.6vw + 3px), 67px);
+      transform:translateX(6px);
     }
 
-    .choices{display:flex;gap:10px;width:100%}
+    form{display:grid; gap:var(--gapForm); width:min(560px, 100%); justify-items:center}
+
+    label{
+      font-weight:700; font-size:1.02rem; letter-spacing:.2px;
+      margin-top:2px; margin-bottom:6px; text-align:center;
+    }
+
+    .field{width:100%; text-align:center; display:grid; justify-items:center}
+
+    /* Typeahead (autocompletar) */
+    .typeahead{ position:relative; width:fit-content; max-width:90%; margin-inline:auto; text-align:left }
+    .ta-input{
+      width:max-content; max-width:100%; min-width:12ch; font:inherit;
+      padding:8px 12px; border:1px solid #a81b2133; border-radius:12px; background:#fff; color:inherit;
+      outline:none; text-align:center
+    }
+    .ta-options{
+      position:absolute; top:100%; left:0; right:0; z-index:2;
+      background:#fff; border:1px solid #a81b2133; border-radius:12px; box-shadow:0 6px 16px rgba(0,0,0,.06);
+      margin-top:6px; max-height:min(240px, 45vh); overflow:auto; display:none; padding:4px
+    }
+    .ta-options.open{ display:block }
+    .ta-options li{ list-style:none; padding:8px 10px; border-radius:10px; cursor:pointer; white-space:nowrap }
+    .ta-options li[aria-selected="true"], .ta-options li:hover{ background:#a81b210d }
+
+    /* (stack-dropdown styles removed; using typeahead) */
+
+    .choices{display:flex; gap:var(--gapChoices); width:100%; flex-wrap:wrap; min-width:0; justify-content:center; align-items:flex-start}
+    .choice{display:grid; gap:8px; justify-items:center}
+    /* Sacudida sutil (aplicar clase .shake al elemento objetivo) */
+    @keyframes shakeX {
+      0%{ transform: translateX(0) }
+      20%{ transform: translateX(-3px) }
+      40%{ transform: translateX(3px) }
+      60%{ transform: translateX(-2px) }
+      80%{ transform: translateX(2px) }
+      100%{ transform: translateX(0) }
+    }
+    .shake{ animation: shakeX .38s ease both }
     .choices button{
-      flex:1 1 0;padding:12px 14px;font:inherit;border-radius:999px;
-      border:1px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer
+      width:var(--circle); height:var(--circle);                 /* botones redondos y compactos */
+      border-radius:50%;
+      display:grid; place-items:center;
+      padding:0;
+      font-size:28px; font-weight:800; line-height:1;
+      border:2px solid var(--ink);
+      background:#fff; color:var(--ink);
+      cursor:pointer;
+      transition:transform .08s ease;
     }
+    .choices button:hover{ transform:translateY(-1px) }
+    .choices button:focus-visible{ outline:3px solid #0000; box-shadow:0 0 0 3px #ffffff, 0 0 0 6px #a81b21 }
     .choices button[aria-pressed="true"]{background:var(--ink);color:#fff}
+    .choice-label{ font-size:.95rem; font-weight:700; letter-spacing:.2px }
 
     .submit{
-      padding:12px 16px;border:none;border-radius:999px;background:var(--ink);
-      color:#fff;font-weight:700;cursor:pointer;width:100%
+      padding:10px 18px;
+      border:none; border-radius:999px;
+      background:var(--ink); color:#fff;
+      font-weight:800; cursor:pointer; width:auto;
+      min-width: calc(var(--circle) + 2em);
+      font-size:clamp(0.95rem, 2.8vw, 1.1rem);
+      letter-spacing:.2px;
+      /* arriba la misma distancia que hay entre los botones circulares */
+      margin: var(--gapChoices) auto 0;
+      display:inline-flex; align-items:center; justify-content:center;
     }
 
     .error{font-size:.9rem;color:#8e151a;min-height:1.2em}
 
-    @media (max-width:420px){
-      :root{--padX:11%;--padY:15%}
-      h1{font-size:clamp(26px,7vw,42px)}
+    @media (max-width:520px){
+      :root{
+        --padX:13.5%;--padY:16.5%;--safe:2.25%;
+        --gapForm:12px;--gapChoices:14px;--circle:56px; --viewportGap:0;
+      } /* más margen en móviles y elementos más compactos; frame a pantalla completa */
+      .frame{ top:0; bottom:0; left:0; right:0; }
+      .frame.zoomed{ --zoomScale: 1.12 }
+      .title{transform:rotate(-13deg)}
+      .title .line1{margin-bottom:-10px; font-size:clamp(43px, calc(6.2vw + 7px), 65px)}
+      .title .line2{margin-bottom:-8px;  font-size:clamp(31px, calc(4.2vw + 7px), 49px)}
+      .title .line3{                      font-size:clamp(43px, calc(6.0vw + 7px), 63px)}
+      form{gap:12px}
+      .select{padding:6px 10px; font-size:0.95rem}
+      .choice-label{ font-size:.9rem }
+      .submit{ font-size:clamp(0.9rem, 2.4vw, 1rem); min-width: calc(var(--circle) + 1.6em) }
+      /* asegúrate de que Enviar no toque el borde inferior */
+      .submit{margin-top: var(--gapChoices)}
+      /* peticiones: bajar el título ~3em y subir Enviar ~3em */
+      .title{ margin-top: 6em }
+      .submit{ margin-bottom: 12em }
     }
 
     @media (prefers-reduced-motion:reduce){
@@ -84,50 +256,73 @@
 <body>
   <div class="frame">
     <div class="content">
-      <h1>Confirma asistencia</h1>
+      <!-- Título en tres líneas -->
+      <div class="title" aria-label="Confirma asistencia">
+        <span class="line1">Confirma</span>
+        <span class="line2">tu</span>
+        <span class="line3">asistencia</span>
+      </div>
 
-      <form id="rsvp" action="https://script.google.com/macros/s/AKfycbzTE4WPKTexIvxcSF8w8E4sY2lJUXkajDCHQ2DvKYQVHlc7zanfsRIgm2DN5n7Le4Jm/exec" method="POST">
-        <!-- Ajusta la URL del Google Apps Script aquí -->
-        <input type="hidden" name="_subject" value="RSVP Boda – Nueva respuesta">
+      <form id="rsvp" action="https://script.google.com/macros/s/AKfycbwqQSBqSKPNssBX17Fyu7IzJDmClrHetzYI71WAOZJpfLayZcrcLnUVCuH-HEBKUFIE/exec" method="POST" novalidate>
+        <!-- honeypot anti-spam -->
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
 
-        <div style="width:100%">
-          <label for="nombre">Nombre</label>
-          <select id="nombre" name="nombre" required>
-            <option value="" disabled selected>Selecciona tu nombre…</option>
-            <option>Ana Pérez</option>
-            <option>Juan García</option>
-            <option>Carolina Soto</option>
-            <option>Martín Rivas</option>
-            <option>Valentina Herrera</option>
-            <option>Felipe González</option>
-            <option>María José</option>
-            <option>Diego Torres</option>
-            <option>Catalina López</option>
-            <option>Benjamín Silva</option>
-            <option>Sofía Vargas</option>
-            <option>Camila Díaz</option>
-          </select>
+        <div class="field">
+          <label>Invitado</label>
+          <div class="typeahead" id="nombreType">
+            <input type="text" class="ta-input" id="nombreInput" autocomplete="off" placeholder="Escribe nombre o apellido…">
+            <input type="hidden" name="nombre" id="nombreHidden">
+            <ul class="ta-options" id="taOptions" role="listbox" aria-label="Sugerencias"></ul>
+          </div>
         </div>
 
         <input type="hidden" name="asistencia" id="asistencia" required>
         <div class="choices" role="group" aria-label="Asistencia">
-          <button type="button" data-value="Sí" aria-pressed="false">Confirmar asistencia</button>
-          <button type="button" data-value="No" aria-pressed="false">No podré asistir</button>
+          <div class="choice">
+            <button type="button" data-value="Sí" aria-pressed="false" aria-label="Confirmar asistencia">✓</button>
+            <span class="choice-label">Confirmar</span>
+          </div>
+          <div class="choice">
+            <button type="button" data-value="No" aria-pressed="false" aria-label="No confirmar">✕</button>
+            <span class="choice-label">No confirmar</span>
+          </div>
         </div>
 
         <div id="msg" class="error" aria-live="polite"></div>
-
         <button class="submit" type="submit">Enviar</button>
       </form>
     </div>
   </div>
 
+  <!-- Cake decorative asset (outside the frame, centered at bottom) -->
+  <img src="/boda/assets/cake.png" alt="Cake" aria-hidden="true" class="cake-deco">
+  <div class="loading-overlay" aria-hidden="true"></div>
+
   <script>
     const hidden = document.getElementById('asistencia');
+    // Typeahead (nombre)
+    const NAMES = [
+      'Mariana Ingrande','Battista Ingrande','Giovanbattista Ingrande','Alibel Matheus','Aliangel Matheus','Jorman Gaize','Flor García','María Gaize','Germán Ng','John Villasana'
+    ];
+    const nombreHidden = document.getElementById('nombreHidden');
+    const ta = document.getElementById('nombreType');
+    const taInput = document.getElementById('nombreInput');
+    const taList = document.getElementById('taOptions');
     const btns = document.querySelectorAll('.choices button');
+    const submitBtn = document.querySelector('.submit');
     const form = document.getElementById('rsvp');
     const msg = document.getElementById('msg');
+
+    // rebote del título al cargar (2 veces)
+    window.addEventListener('load', ()=>{
+      const t = document.querySelector('.title');
+      if(t){
+        t.classList.remove('a-bounce');
+        // Forzar reflow para reiniciar animación si recargas rápido
+        void t.offsetWidth;
+        t.classList.add('a-bounce');
+      }
+    });
 
     btns.forEach(b=>{
       b.addEventListener('click',()=>{
@@ -135,28 +330,100 @@
         b.setAttribute('aria-pressed','true');
         hidden.value = b.dataset.value;
         msg.textContent = '';
+        // Pequeño shake en el botón Enviar para invitar a confirmar
+        if(submitBtn){
+          submitBtn.classList.remove('shake');
+          void submitBtn.offsetWidth;
+          submitBtn.classList.add('shake');
+          submitBtn.addEventListener('animationend', ()=> submitBtn.classList.remove('shake'), {once:true});
+        }
       });
     });
 
-    // Validación mínima antes de enviar
+    // Helpers typeahead
+    const norm = s=> s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+    // Unified setter for typeahead
+    function setNombre(name){
+      if(!name) return;
+      nombreHidden.value = name;
+      if(taInput){ taInput.value = name; }
+      msg.textContent = '';
+    }
+
+    // Typeahead wiring (only if present)
+    if(ta && taInput && taList){
+      function renderSuggestions(q){
+        const query = norm(q.trim());
+        taList.innerHTML = '';
+        taList.classList.remove('open');
+        if(query.length < 1) return;
+        const items = NAMES.filter(n=> norm(n).includes(query));
+        if(items.length===0) return;
+        items.slice(0,8).forEach(name=>{
+          const li = document.createElement('li');
+          li.textContent = name; li.setAttribute('role','option');
+          li.addEventListener('click', ()=> setNombre(name));
+          taList.appendChild(li);
+        });
+        taList.classList.add('open');
+      }
+      taInput.addEventListener('input', ()=>{
+        nombreHidden.value = '';
+        renderSuggestions(taInput.value);
+      });
+      taInput.addEventListener('keydown', (e)=>{
+        if(e.key==='Escape'){ taList.classList.remove('open'); return; }
+        if(e.key==='Enter'){
+          const first = taList.querySelector('li');
+          if(first){ e.preventDefault(); setNombre(first.textContent); }
+        }
+      });
+      document.addEventListener('click', (e)=>{
+        if(!ta.contains(e.target)) taList.classList.remove('open');
+      });
+    }
+
+    // (stack dropdown removed)
+
+    // Validación mínima antes de enviar + animación de espera con torta
     form.addEventListener('submit', (e)=>{
+      if(!nombreHidden.value){
+        e.preventDefault();
+        msg.textContent = 'Por favor selecciona tu nombre.';
+        return;
+      }
       if(!hidden.value){
         e.preventDefault();
         msg.textContent = 'Por favor elige “Confirmar asistencia” o “No podré asistir”.';
         return;
       }
-      // Guarda la respuesta en sessionStorage para usar en gracias.html
+      // Guarda la respuesta en sessionStorage para gracias.html
       sessionStorage.setItem('asistencia', hidden.value);
+      sessionStorage.setItem('nombre', nombreHidden.value);
+      // Muestra animación: llevar torta al centro e invertir colores rápido
+      e.preventDefault();
+      const cake = document.querySelector('.cake-deco');
+      if(cake){
+        // Centrar y animar (2s wobble + scale)
+        cake.classList.add('loading');
+        const overlay = document.querySelector('.loading-overlay');
+        if(overlay){ overlay.classList.add('show'); }
+      }
+      // Evita múltiples envíos
+      if(form.dataset.submitting === '1') return;
+      form.dataset.submitting = '1';
+      // ~2.1s totales antes de enviar para permitir ver la animación
+      setTimeout(()=>{ form.submit(); }, 2100);
     });
 
-    // Prefill via URL (?name=...&assist=si/no)
+    // Prefill por URL (?name=...&assist=si/no)
     (function(){
       const p=new URLSearchParams(location.search);
       const n=p.get('name');
       if(n){
-        const sel=document.getElementById('nombre');
-        const opt=[...sel.options].find(o=>o.text.toLowerCase()===n.toLowerCase());
-        if(opt) sel.value=opt.text;
+        const match=NAMES.find(x=> norm(x)===norm(n));
+        if(match) setNombre(match);
       }
       const a=p.get('assist');
       if(a){
@@ -164,6 +431,91 @@
         if(match){match.click();}
       }
     })();
+
+    // Doble tap / doble click para zoom del marco
+    (function(){
+      const frame = document.querySelector('.frame');
+      let zoomed = false; let lastTap = 0;
+      function toggleZoom(cx, cy){
+        const rect = frame.getBoundingClientRect();
+        // establece origen de transformación donde se hizo tap/click
+        if(Number.isFinite(cx) && Number.isFinite(cy)){
+          frame.style.setProperty('--zx', (cx) + 'px');
+          frame.style.setProperty('--zy', (cy) + 'px');
+        } else {
+          frame.style.removeProperty('--zx');
+          frame.style.removeProperty('--zy');
+        }
+        zoomed = !zoomed;
+        frame.classList.toggle('zoomed', zoomed);
+      }
+      frame.addEventListener('dblclick', (e)=>{
+        const r = frame.getBoundingClientRect();
+        toggleZoom(e.clientX - r.left, e.clientY - r.top);
+      });
+      frame.addEventListener('touchend', (e)=>{
+        const now = Date.now();
+        if(now - lastTap < 350){
+          const t = e.changedTouches[0];
+          const r = frame.getBoundingClientRect();
+          toggleZoom(t.clientX - r.left, t.clientY - r.top);
+          e.preventDefault();
+        }
+        lastTap = now;
+      }, {passive:false});
+    })();
   </script>
+
+  <!-- ===================== -->
+  <!-- OPCIONAL: alternativa sin dropdown (chips de nombres)
+       Para activarla:
+       1) Quita el <select> y pega este bloque dentro del <form> en su lugar.
+       2) Asegúrate de mantener el input hidden name="nombre" para enviar el valor. -->
+  <!--
+  <style>
+    .chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+    .chip{border:1px solid var(--ink);border-radius:999px;padding:8px 12px;cursor:pointer}
+    .chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+  </style>
+
+  <input type="hidden" id="nombreHidden" name="nombre" required>
+  <div class="field">
+    <label>Invitado</label>
+    <div class="chips" id="chips">
+      <button type="button" class="chip" data-name="Mariana Ingrande">Mariana Ingrande</button>
+      <button type="button" class="chip" data-name="Battista Ingrande">Battista Ingrande</button>
+      <button type="button" class="chip" data-name="Giovanbattista Ingrande">Giovanbattista Ingrande</button>
+      <button type="button" class="chip" data-name="Alibel Matheus">Alibel Matheus</button>
+      <button type="button" class="chip" data-name="Aliangel Matheus">Aliangel Matheus</button>
+      <button type="button" class="chip" data-name="Jorman Gaize">Jorman Gaize</button>
+      <button type="button" class="chip" data-name="Flor García">Flor García</button>
+      <button type="button" class="chip" data-name="María Gaize">María Gaize</button>
+      <button type="button" class="chip" data-name="Germán Ng">Germán Ng</button>
+      <button type="button" class="chip" data-name="John Villasana">John Villasana</button>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const chips = document.querySelectorAll('.chip');
+      const hiddenName = document.getElementById('nombreHidden');
+      chips.forEach(c=>{
+        c.addEventListener('click',()=>{
+          chips.forEach(x=>x.setAttribute('aria-pressed','false'));
+          c.setAttribute('aria-pressed','true');
+          hiddenName.value = c.dataset.name;
+        });
+      });
+      // Validación: exige nombre si usas chips
+      form.addEventListener('submit', (e)=>{
+        if(hiddenName && !hiddenName.value){
+          e.preventDefault();
+          msg.textContent = 'Por favor selecciona tu nombre.';
+        }
+      }, {capture:true});
+    })();
+  </script>
+  -->
+  <!-- ===================== -->
 </body>
 </html>
