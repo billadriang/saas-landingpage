@@ -6,11 +6,12 @@
   <title>RSVP – Boda</title>
   <style>
     @font-face{
-      font-family:'NightWindSent';
-      src: url('assets/NightWindSentSample.ttf') format('truetype'),
-           url('assets/NightWindSentSample.otf') format('opentype');
-      font-weight:400; font-style:normal; font-display:swap;
-    }
+  font-family:'NightWindSent';
+  src: url('/boda/assets/NightWindSentSample.ttf') format('truetype'),
+       url('/boda/assets/NightWindSentSample.otf') format('opentype');
+  font-weight:400; font-style:normal; font-display:swap;
+}
+
 
     :root{
       --bg:#f3f2ee;           /* fondo crema */
@@ -35,8 +36,8 @@
     .frame{
       width:min(92vw,var(--maxW));
       aspect-ratio:var(--ratio);
-      background:var(--bg) url('assets/framev4.svg') no-repeat
-                  calc(50% + var(--bgShiftX)) center/contain;
+       background: var(--bg) url('/boda/assets/framev4.svg') no-repeat
+              calc(50% + var(--bgShiftX)) center/contain;
       position:relative;display:flex;align-items:center;justify-content:center;
     }
 
