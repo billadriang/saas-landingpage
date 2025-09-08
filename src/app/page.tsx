@@ -32,9 +32,17 @@ export default function Home() {
         <InteractiveCube />
 
         {/* PDF Link Added Here */}
-        <div className="mt-12"> {/* Adjust margin-top as needed */}
-          <Link href="/properties_dayana.pdf" target="_blank" rel="noopener noreferrer">
-            <Button size="tiny" variant="ghost">View My Proposal (PDF)</Button>
+        <div className="mt-12">
+          {' '}
+          {/* Adjust margin-top as needed */}
+          <Link
+            href="/properties_dayana.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button size="tiny" variant="ghost">
+              View My Proposal (PDF)
+            </Button>
           </Link>
         </div>
       </div>
@@ -90,5 +98,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }
