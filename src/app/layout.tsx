@@ -5,23 +5,36 @@ import { ThemeProvider } from '@/providers/theme-provider'
 import { Header } from '@/components/common/header'
 import { Footer } from '@/components/common/footer'
 import { Analytics } from '@vercel/analytics/react'
+import { siteConfig } from '@/lib/site'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.billgaize.com'),
-  title: 'Bill Gaize Dev, Tech Solutions, and Consulting',
-  description:
-    'Quickly link new on-call tickets to similar past incidents and their solutions. All directly in Slack the moment an incident happens.',
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default:
+      'Bill Gaize | Shopify Integrations, Web Development, and AI Workflows',
+    template: '%s | Bill Gaize'
+  },
+  description: siteConfig.description,
+  alternates: {
+    canonical: '/'
+  },
   openGraph: {
+    type: 'website',
+    url: siteConfig.url,
+    title:
+      'Bill Gaize | Shopify Integrations, Web Development, and AI Workflows',
+    description: siteConfig.description,
+    siteName: 'Bill Gaize',
     images: '/opengraph-image.png'
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Bill Gaize Dev, Tech Solutions, and Consulting',
-    description:
-      'Got a vision for your online idea? Lets bring it to life! Reach out now, and together we will transform your idea into a thriving e-commerce success story. 💬',
-    images: ['https://i.postimg.cc/T3v8TKB7/Capture.png']
+    title:
+      'Bill Gaize | Shopify Integrations, Web Development, and AI Workflows',
+    description: siteConfig.description,
+    images: [`${siteConfig.url}/opengraph-image.png`]
   }
 }
 

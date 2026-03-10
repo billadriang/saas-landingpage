@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { getAllPosts, getPostBySlug } from '@/content/posts'
+import { getAllPosts, getPostBySlug } from '@/lib/posts'
+import { siteConfig } from '@/lib/site'
 
 interface PostPageProps {
   params: {
@@ -26,8 +29,24 @@ export function generateMetadata({
   }
 
   return {
-    title: `${post.title} | Bill Gaize`,
-    description: post.description
+    title: post.seoTitle ?? post.title,
+    description: post.seoDescription ?? post.description,
+    alternates: {
+      canonical: `/insights/${post.slug}`
+    },
+    openGraph: {
+      type: 'article',
+      url: `${siteConfig.url}/insights/${post.slug}`,
+      title: post.seoTitle ?? post.title,
+      description: post.seoDescription ?? post.description,
+      publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt ?? post.publishedAt
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.seoTitle ?? post.title,
+      description: post.seoDescription ?? post.description
+    }
   }
 }
 
@@ -40,16 +59,41 @@ export default function PostPage({
     notFound()
   }
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.seoDescription ?? post.description,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt ?? post.publishedAt,
+    author: {
+      '@type': 'Person',
+      name: 'Bill Gaize'
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Bill Gaize'
+    },
+    mainEntityOfPage: `${siteConfig.url}/insights/${post.slug}`,
+    articleSection: post.category
+  }
+
   return (
     <div className="flex w-full justify-center px-6 py-12 md:px-12 md:py-24">
       <article className="w-full max-w-3xl space-y-10">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(articleSchema)
+          }}
+        />
         <div className="space-y-6">
           <Link
             href="/insights"
             className="inline-flex text-sm text-muted-foreground transition-colors
               hover:text-foreground"
           >
-            Back to insights
+            Volver a insights
           </Link>
           <div className="space-y-4">
             <div
@@ -63,7 +107,7 @@ export default function PostPage({
               <span>
                 {new Date(
                   post.publishedAt
-                ).toLocaleDateString('en-US', {
+                ).toLocaleDateString('es-CL', {
                   month: 'long',
                   day: 'numeric',
                   year: 'numeric'
@@ -91,50 +135,20 @@ export default function PostPage({
         </div>
 
         <div className="post-body">
-          {post.sections.map((section, index) => {
-            if (section.type === 'heading') {
-              return (
-                <h2 key={`${post.slug}-${index}`}>
-                  {section.content}
-                </h2>
-              )
-            }
-
-            if (section.type === 'list') {
-              return (
-                <ul key={`${post.slug}-${index}`}>
-                  {section.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              )
-            }
-
-            if (section.type === 'quote') {
-              return (
-                <blockquote key={`${post.slug}-${index}`}>
-                  {section.content}
-                </blockquote>
-              )
-            }
-
-            return (
-              <p key={`${post.slug}-${index}`}>
-                {section.content}
-              </p>
-            )
-          })}
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {post.body}
+          </ReactMarkdown>
         </div>
 
         <div className="rounded-[2rem] border border-border/70 bg-card/60 p-8">
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold tracking-tight">
-              Want this kind of content system on your site?
+              Quieres publicar mas contenido como este?
             </h2>
             <p className="text-sm leading-7 text-muted-foreground">
-              I can wire this into a landing page, a proper
-              blog index, or a CMS-backed publishing flow
-              depending on how far you want to take it.
+              Ahora ya tienes una base para escribir,
+              administrar e indexar contenido dentro de tu
+              propio sitio.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="mailto:me@billgaize.com">

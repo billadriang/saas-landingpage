@@ -1,8 +1,26 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { PostCard } from '@/components/insights/post-card'
 import Typography from '@/components/ui/typography'
-import { getAllPosts } from '@/content/posts'
+import { getAllPosts } from '@/lib/posts'
+import { siteConfig } from '@/lib/site'
+
+export const metadata: Metadata = {
+  title: 'Insights',
+  description:
+    'Articulos sobre Shopify, integraciones, desarrollo web y flujos de trabajo con IA escritos por Bill Gaize.',
+  alternates: {
+    canonical: '/insights'
+  },
+  openGraph: {
+    title: 'Insights | Bill Gaize',
+    description:
+      'Articulos sobre Shopify, integraciones, desarrollo web y flujos de trabajo con IA escritos por Bill Gaize.',
+    url: `${siteConfig.url}/insights`,
+    type: 'website'
+  }
+}
 
 export default function InsightsPage() {
   const posts = getAllPosts()
@@ -20,28 +38,27 @@ export default function InsightsPage() {
               Insights
             </p>
             <Typography variant="h1" className="max-w-3xl">
-              Long-form posts for founders, Shopify builds,
-              and AI-assisted workflows.
+              Articulos largos sobre Shopify, desarrollo web
+              y flujos con IA.
             </Typography>
             <Typography
               variant="p"
               className="max-w-2xl text-muted-foreground"
             >
-              This gives your site a place for articles that
-              feel more editorial than salesy. Publish them
-              as static content now, and move to a CMS later
-              if you need it.
+              Esta seccion funciona como tu hub editorial:
+              posts indexables, con URL propia, metadata
+              fuerte y una estructura limpia para Google.
             </Typography>
           </div>
           <div className="flex flex-wrap gap-4">
             <Link href="/">
               <Button size="tiny" variant="ghost">
-                Back to home
+                Volver al inicio
               </Button>
             </Link>
             <Link href="mailto:me@billgaize.com">
               <Button size="tiny" variant="outline">
-                Pitch me a project
+                Hablemos
               </Button>
             </Link>
           </div>

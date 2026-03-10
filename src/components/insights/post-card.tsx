@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import type { Post } from '@/content/posts'
+import type { Post } from '@/lib/posts'
 
 interface PostCardProps {
   post: Post
@@ -38,7 +38,7 @@ export function PostCard({ post }: PostCardProps) {
       >
         <span>
           {new Date(post.publishedAt).toLocaleDateString(
-            'en-US',
+            'es-CL',
             {
               month: 'long',
               day: 'numeric',
@@ -47,7 +47,7 @@ export function PostCard({ post }: PostCardProps) {
           )}
         </span>
         <span className="transition-transform duration-200 group-hover:translate-x-1">
-          Read article
+          Leer articulo
         </span>
       </div>
     </Link>

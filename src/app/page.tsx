@@ -1,12 +1,19 @@
 // app/page.tsx
+import type { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
 import Typography from '@/components/ui/typography'
 import Link from 'next/link'
 import InteractiveCube from '@/components/ui/InteractiveCube'
 import Feature from './feature'
 import { ArrowUpDown, Timer, Workflow } from 'lucide-react'
-import { getFeaturedPosts } from '@/content/posts'
+import { getFeaturedPosts } from '@/lib/posts'
 import { PostCard } from '@/components/insights/post-card'
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/'
+  }
+}
 
 export default function Home() {
   const featuredPosts = getFeaturedPosts()

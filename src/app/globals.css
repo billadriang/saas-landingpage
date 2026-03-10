@@ -80,8 +80,20 @@
     @apply pt-6 text-2xl font-semibold tracking-tight text-foreground md:text-3xl;
   }
 
+  .post-body h3 {
+    @apply pt-4 text-xl font-semibold tracking-tight text-foreground md:text-2xl;
+  }
+
   .post-body p {
     @apply text-base leading-8 text-muted-foreground md:text-lg;
+  }
+
+  .post-body a {
+    @apply text-foreground underline underline-offset-4;
+  }
+
+  .post-body strong {
+    @apply font-semibold text-foreground;
   }
 
   .post-body ul {
@@ -94,5 +106,9 @@
 
   .post-body blockquote {
     @apply rounded-3xl border-l-4 border-primary bg-card px-6 py-5 text-xl font-medium leading-8 text-foreground;
+  }
+
+  .post-body code {
+    @apply rounded bg-card px-1.5 py-0.5 text-sm text-foreground;
   }
 }

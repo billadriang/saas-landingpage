@@ -1,6 +1,7 @@
 'use client'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { usePathname } from 'next/navigation'
 import Typography from '@/components/ui/typography'
@@ -20,6 +21,10 @@ export function Header({ className }: SidebarProps) {
   const pathname = usePathname()
   const items = [
     {
+      href: '/admin',
+      title: 'Admin'
+    },
+    {
       href: '/insights',
       title: 'Insights'
     },
@@ -37,10 +42,12 @@ export function Header({ className }: SidebarProps) {
 
   const getLogo = () => (
     <Link href="/" className="pointer flex items-center">
-      <img
+      <Image
         src="/logo.svg"
         alt="Bill Gaize Dev logo"
         className="mr-3"
+        width={24}
+        height={24}
       />
       <Typography className="!text-white !text-base font-medium ">
         Bill Gaize Dev
