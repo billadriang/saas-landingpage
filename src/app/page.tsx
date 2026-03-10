@@ -5,8 +5,12 @@ import Link from 'next/link'
 import InteractiveCube from '@/components/ui/InteractiveCube'
 import Feature from './feature'
 import { ArrowUpDown, Timer, Workflow } from 'lucide-react'
+import { getFeaturedPosts } from '@/content/posts'
+import { PostCard } from '@/components/insights/post-card'
 
 export default function Home() {
+  const featuredPosts = getFeaturedPosts()
+
   return (
     <div
       className="flex flex-col h-full md:py-36 md:px-32 pt-11 pb-24 px-8
@@ -93,6 +97,29 @@ export default function Home() {
           >
             <Button size="tiny" variant="ghost">
               {`Book now`}
+            </Button>
+          </Link>
+        </div>
+        <div className="flex w-full max-w-5xl flex-col gap-8 items-center">
+          <div className="flex flex-col gap-4 items-center">
+            <Typography className="max-w-3xl" variant="h1">
+              Insights that let visitors read your thinking,
+              not just scan your services
+            </Typography>
+            <Typography className="max-w-2xl" variant="p">
+              Publish long-form posts directly inside the
+              site, with clean article pages that are easy
+              to expand later into a full content hub.
+            </Typography>
+          </div>
+          <div className="grid w-full gap-6 md:grid-cols-2 text-left">
+            {featuredPosts.map((post) => (
+              <PostCard key={post.slug} post={post} />
+            ))}
+          </div>
+          <Link href="/insights">
+            <Button size="tiny" variant="outline">
+              Browse all posts
             </Button>
           </Link>
         </div>

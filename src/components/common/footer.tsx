@@ -11,13 +11,25 @@ export function Footer() {
             href="/"
             className="pointer flex items-center"
           >
-            <img src="/logo.svg" className="mr-3" />
+            <img
+              src="/logo.svg"
+              alt="Bill Gaize Dev logo"
+              className="mr-3"
+            />
             <Typography className="!text-white !text-base font-medium ">
               Bill Gaize Dev
             </Typography>
           </Link>
         </div>
         <div className="flex max-w-fit items-center gap-x-4">
+          <Link
+            href="/insights"
+            className="pointer block w-fit flex-1"
+          >
+            <Typography variant="p" className="w-max">
+              Insights
+            </Typography>
+          </Link>
           <Link
             href="https://calendly.com/me--52uo/30min"
             target="_blank"

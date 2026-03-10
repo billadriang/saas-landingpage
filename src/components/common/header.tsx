@@ -20,6 +20,10 @@ export function Header({ className }: SidebarProps) {
   const pathname = usePathname()
   const items = [
     {
+      href: '/insights',
+      title: 'Insights'
+    },
+    {
       href: 'https://calendly.com/me--52uo/30min',
       title: 'Book a slot',
       openInNewTab: true
@@ -33,7 +37,11 @@ export function Header({ className }: SidebarProps) {
 
   const getLogo = () => (
     <Link href="/" className="pointer flex items-center">
-      <img src="/logo.svg" className="mr-3" />
+      <img
+        src="/logo.svg"
+        alt="Bill Gaize Dev logo"
+        className="mr-3"
+      />
       <Typography className="!text-white !text-base font-medium ">
         Bill Gaize Dev
       </Typography>
@@ -66,13 +74,16 @@ export function Header({ className }: SidebarProps) {
       <>
         {items.map((item) => {
           const selected =
-            pathname === item.href ||
-            pathname.includes(item.href)
+            item.href.startsWith('/') &&
+            (pathname === item.href ||
+              pathname.startsWith(`${item.href}/`))
           return (
             <Link
               href={item.href}
               className="pointer block w-fit"
-              target={item.openInNewTab ? '_blank' : ''}
+              target={
+                item.openInNewTab ? '_blank' : undefined
+              }
               key={item.title}
             >
               <Typography

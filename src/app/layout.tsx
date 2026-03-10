@@ -9,6 +9,7 @@ import { Analytics } from '@vercel/analytics/react'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.billgaize.com'),
   title: 'Bill Gaize Dev, Tech Solutions, and Consulting',
   description:
     'Quickly link new on-call tickets to similar past incidents and their solutions. All directly in Slack the moment an incident happens.',

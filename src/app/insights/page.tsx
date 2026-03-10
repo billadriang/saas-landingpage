@@ -1,0 +1,58 @@
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { PostCard } from '@/components/insights/post-card'
+import Typography from '@/components/ui/typography'
+import { getAllPosts } from '@/content/posts'
+
+export default function InsightsPage() {
+  const posts = getAllPosts()
+
+  return (
+    <div className="flex w-full justify-center px-6 py-12 md:px-12 md:py-24">
+      <div className="w-full max-w-5xl space-y-12">
+        <div
+          className="space-y-6 rounded-[2rem] border border-border/70
+            bg-gradient-to-br from-card via-card to-background p-8
+            md:p-12"
+        >
+          <div className="space-y-4">
+            <p className="text-xs uppercase tracking-[0.32em] text-muted-foreground">
+              Insights
+            </p>
+            <Typography variant="h1" className="max-w-3xl">
+              Long-form posts for founders, Shopify builds,
+              and AI-assisted workflows.
+            </Typography>
+            <Typography
+              variant="p"
+              className="max-w-2xl text-muted-foreground"
+            >
+              This gives your site a place for articles that
+              feel more editorial than salesy. Publish them
+              as static content now, and move to a CMS later
+              if you need it.
+            </Typography>
+          </div>
+          <div className="flex flex-wrap gap-4">
+            <Link href="/">
+              <Button size="tiny" variant="ghost">
+                Back to home
+              </Button>
+            </Link>
+            <Link href="mailto:me@billgaize.com">
+              <Button size="tiny" variant="outline">
+                Pitch me a project
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {posts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}

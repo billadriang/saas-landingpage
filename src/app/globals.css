@@ -70,3 +70,29 @@
     }
   }
 }
+
+@layer components {
+  .post-body {
+    @apply space-y-6 text-lg leading-8 text-foreground;
+  }
+
+  .post-body h2 {
+    @apply pt-6 text-2xl font-semibold tracking-tight text-foreground md:text-3xl;
+  }
+
+  .post-body p {
+    @apply text-base leading-8 text-muted-foreground md:text-lg;
+  }
+
+  .post-body ul {
+    @apply space-y-3 pl-6;
+  }
+
+  .post-body li {
+    @apply list-disc text-base leading-8 text-muted-foreground md:text-lg;
+  }
+
+  .post-body blockquote {
+    @apply rounded-3xl border-l-4 border-primary bg-card px-6 py-5 text-xl font-medium leading-8 text-foreground;
+  }
+}
